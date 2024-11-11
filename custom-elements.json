@@ -1,0 +1,356 @@
+{
+  "schemaVersion": "1.0.0",
+  "readme": "",
+  "modules": [
+    {
+      "kind": "javascript-module",
+      "path": "Project-1-card.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "",
+          "name": "Project1",
+          "members": [
+            {
+              "kind": "method",
+              "name": "_onDragEnd",
+              "parameters": [
+                {
+                  "name": "event"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "title",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "privacy": "public",
+              "attribute": "title"
+            },
+            {
+              "kind": "field",
+              "name": "description",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "privacy": "public",
+              "attribute": "description"
+            },
+            {
+              "kind": "field",
+              "name": "created",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "privacy": "public",
+              "attribute": "created"
+            },
+            {
+              "kind": "field",
+              "name": "lastUpdated",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "privacy": "public",
+              "attribute": "lastUpdated"
+            },
+            {
+              "kind": "field",
+              "name": "logo",
+              "type": {
+                "text": "string"
+              },
+              "default": "''",
+              "privacy": "public",
+              "attribute": "logo"
+            },
+            {
+              "kind": "field",
+              "name": "slug",
+              "type": {
+                "text": "string"
+              },
+              "default": "'https://haxtheweb.org'",
+              "privacy": "public",
+              "attribute": "slug"
+            }
+          ],
+          "events": [
+            {
+              "name": "card-drag-end",
+              "type": {
+                "text": "CustomEvent"
+              }
+            }
+          ],
+          "attributes": [
+            {
+              "name": "title",
+              "fieldName": "title"
+            },
+            {
+              "name": "description",
+              "fieldName": "description"
+            },
+            {
+              "name": "created",
+              "fieldName": "created"
+            },
+            {
+              "name": "lastUpdated",
+              "fieldName": "lastUpdated"
+            },
+            {
+              "name": "logo",
+              "fieldName": "logo"
+            },
+            {
+              "name": "slug",
+              "fieldName": "slug"
+            }
+          ],
+          "mixins": [
+            {
+              "name": "DDDSuper",
+              "package": "@haxtheweb/d-d-d/d-d-d.js"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "project-1",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Project1",
+          "declaration": {
+            "name": "Project1",
+            "module": "Project-1-card.js"
+          }
+        },
+        {
+          "kind": "custom-element-definition",
+          "name": "project-1",
+          "declaration": {
+            "name": "Project1",
+            "module": "Project-1-card.js"
+          }
+        }
+      ]
+    },
+    {
+      "kind": "javascript-module",
+      "path": "Project-1-search.js",
+      "declarations": [
+        {
+          "kind": "class",
+          "description": "`Project-1`",
+          "name": "Project1",
+          "members": [
+            {
+              "kind": "field",
+              "name": "tag",
+              "static": true
+            },
+            {
+              "kind": "method",
+              "name": "_analyze"
+            },
+            {
+              "kind": "method",
+              "name": "inputChanged",
+              "parameters": [
+                {
+                  "name": "e"
+                }
+              ]
+            },
+            {
+              "kind": "method",
+              "name": "updateResults",
+              "parameters": [
+                {
+                  "name": "value"
+                }
+              ]
+            },
+            {
+              "kind": "field",
+              "name": "title",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "privacy": "public",
+              "attribute": "title"
+            },
+            {
+              "kind": "field",
+              "name": "value",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"\"",
+              "privacy": "public",
+              "attribute": "value"
+            },
+            {
+              "kind": "field",
+              "name": "items",
+              "type": {
+                "text": "array"
+              },
+              "default": "[]",
+              "privacy": "public",
+              "attribute": "items"
+            },
+            {
+              "kind": "field",
+              "name": "loading",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "privacy": "public",
+              "attribute": "loading",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "isValid",
+              "type": {
+                "text": "boolean"
+              },
+              "default": "false",
+              "privacy": "public",
+              "attribute": "isValid",
+              "reflects": true
+            },
+            {
+              "kind": "field",
+              "name": "jsonURL",
+              "type": {
+                "text": "string"
+              },
+              "default": "\"https://haxtheweb.org/site.json\"",
+              "privacy": "public",
+              "attribute": "json-url"
+            },
+            {
+              "kind": "field",
+              "name": "siteURL",
+              "type": {
+                "text": "string"
+              },
+              "default": "''"
+            },
+            {
+              "kind": "field",
+              "name": "siteDetails",
+              "type": {
+                "text": "array"
+              },
+              "default": "[]",
+              "privacy": "public",
+              "attribute": "siteDetails"
+            },
+            {
+              "kind": "field",
+              "name": "t",
+              "type": {
+                "text": "object"
+              },
+              "default": "{\n      ...this.t,\n      title: \"Title\",\n    }"
+            },
+            {
+              "kind": "field",
+              "name": "",
+              "privacy": "public",
+              "attribute": ""
+            },
+            {
+              "kind": "field",
+              "name": "siteUrl",
+              "privacy": "public",
+              "attribute": "siteUrl"
+            }
+          ],
+          "attributes": [
+            {
+              "name": "",
+              "fieldName": ""
+            },
+            {
+              "name": "title",
+              "fieldName": "title"
+            },
+            {
+              "name": "value",
+              "fieldName": "value"
+            },
+            {
+              "name": "siteUrl",
+              "fieldName": "siteUrl"
+            },
+            {
+              "name": "items",
+              "fieldName": "items"
+            },
+            {
+              "name": "siteDetails",
+              "fieldName": "siteDetails"
+            },
+            {
+              "name": "loading",
+              "fieldName": "loading"
+            },
+            {
+              "name": "isValid",
+              "fieldName": "isValid"
+            },
+            {
+              "name": "json-url",
+              "fieldName": "jsonURL"
+            }
+          ],
+          "mixins": [
+            {
+              "name": "DDDSuper",
+              "package": "@haxtheweb/d-d-d/d-d-d.js"
+            },
+            {
+              "name": "I18NMixin",
+              "package": "@haxtheweb/i18n-manager/lib/I18NMixin.js"
+            }
+          ],
+          "superclass": {
+            "name": "LitElement",
+            "package": "lit"
+          },
+          "tagName": "project-1",
+          "customElement": true
+        }
+      ],
+      "exports": [
+        {
+          "kind": "js",
+          "name": "Project1",
+          "declaration": {
+            "name": "Project1",
+            "module": "Project-1-search.js"
+          }
+        }
+      ]
+    }
+  ]
+}
