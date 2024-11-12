@@ -1,8 +1,7 @@
 import { LitElement, html, css } from "lit";
-import { DDDSuper } from "@haxtheweb/d-d-d/d-d-d.js";
 
-// Extend Project1 with DDDSuper for drag-and-drop capabilities
-export class Project1 extends DDDSuper(LitElement) {
+export class ProjectCard extends LitElement {
+
   constructor() {
     super();
     this.title = '';
@@ -10,89 +9,70 @@ export class Project1 extends DDDSuper(LitElement) {
     this.created = '';
     this.lastUpdated = '';
     this.logo = '';
-    this.slug = 'https://haxtheweb.org';
+    this.slug = '';
+    this.baseURL = 'google.com';
   }
 
   static get properties() {
     return {
-      title: { type: String },
-      description: { type: String },
-      created: { type: String },
-      lastUpdated: { type: String },
-      logo: { type: String },
-      slug: { type: String },
+        title: { type: String },
+        description: { type: String },
+        created: { type: String },
+        lastUpdated: {type: String },
+        logo: { type: String },
+        slug: { type: String },
+        baseURL: { type: String },
     };
   }
 
   static get styles() {
-    return [
-      super.styles, // Inherit styles from DDDSuper
-      css`
-        :host {
-          display: inline-block;
-          margin: 16px;
-          padding: 16px;
-          border: 1px solid #ddd;
-          border-radius: 8px;
-          box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
-          background-color: #fff;
-          cursor: move;
-          transition: box-shadow 0.3s ease;
-        }
-        :host(:hover) {
-          box-shadow: 4px 4px 12px rgba(0, 0, 0, 0.2);
-        }
-        img {
-          max-width: 100px;
-          border-radius: 50%;
-          margin-bottom: 8px;
-        }
-        h3 {
-          margin: 0;
-          font-size: 1.2em;
-        }
-        p {
-          font-size: 0.9em;
-          color: #666;
-        }
-        a {
-          display: inline-block;
-          margin-top: 8px;
-          font-size: 0.9em;
-          color: #0073e6;
-          text-decoration: none;
-        }
-        a:hover {
-          text-decoration: underline;
-        }
-      `,
-    ];
+    return [super.styles,css`
+
+    .card {
+        display: inline-flex;
+        border: var(--ddd-border-md);
+        align-items: center;
+        background-color: #f9f9f9;
+        width: 100%;
+    }
+
+    .image-container {
+        border: var(--ddd-border-xs);
+        width: 100%;
+        display: inline-flex;
+        align-items: center;
+        margin-bottom: 16px;
+    }
+
+    `];
   }
 
   render() {
-    const { title, description, logo, slug } = this.item;
-
     return html`
-      <!-- The DDDSuper container manages drag events -->
-      <d-d-d draggable="true" @dragend="${this._onDragEnd}">
-        <div class="card" @click="${() => window.open(slug, '_blank')}">
-          <img src="${logo || ''}" alt="${title}" />
-          <h3>${title}</h3>
-          <p>${description || 'No description available'}</p>
-          <a href="${slug}" target="_blank">View More</a>
-        </div>
-      </d-d-d>
+    <a class="card"
+        tabindex="0"
+        href="${this.baseURL+'/'+this.slug}"
+        target="_blank"
+    >
+
+    <div class="image-container">
+        <img src="${this.baseURL}/${this.logo}" alt="${this.title}">
+    </div>
+    <div class="info"> ${this.title}</div>
+    <div class="text">${this.description}</div>
+    </a>
     `;
   }
 
-  _onDragEnd(event) {
-    // Handle the drag-end event, like saving the new position
-    this.dispatchEvent(new CustomEvent("card-drag-end", {
-      detail: { position: event.target.position }
-    }));
+
+  static get tag() {
+    return "project-card";
   }
+
 }
 
-customElements.define("project-1", Project1);
+
+customElements.define(ProjectCard.tag, ProjectCard);
+
 
 
