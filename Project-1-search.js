@@ -1,6 +1,7 @@
 import { LitElement, html, css } from "lit";
 import { DDDSuper } from "@haxtheweb/d-d-d/d-d-d.js";
 import { I18NMixin } from "@haxtheweb/i18n-manager/lib/I18NMixin.js";
+import "./Project-1-card.js";
 
 export class Project1 extends DDDSuper(I18NMixin(LitElement)) {
 
@@ -11,8 +12,16 @@ export class Project1 extends DDDSuper(I18NMixin(LitElement)) {
     this.items = [];
     this.loading = false;
     this.jsonURL = 'https://haxtheweb.org/site.json';
-    this.baseURL = this.noJsonEnding(this.jsonURL);
+    this.baseUrl = this.noJsonEnding(this.jsonURL);
     this.isValid = false;
+
+    this.registerLocalization({
+      context: this,
+      localesPath:
+        new URL("./locales/Project-1-search.ar.json", import.meta.url).href +
+        "/../",
+      locales: ["ar", "es", "hi", "zh"],
+    });
     }
 
     static get properties() {
@@ -22,7 +31,7 @@ export class Project1 extends DDDSuper(I18NMixin(LitElement)) {
           items: { type: Array },
           loading: {type: Boolean, reflect: true },
           jsonURL: { type: String, attribute: 'json-url' },
-          baseURL: { type: String },
+          baseUrl: { type: String },
       };
     }
 
@@ -43,17 +52,23 @@ export class Project1 extends DDDSuper(I18NMixin(LitElement)) {
           max-width: 600px;
           margin: 20px auto;
         }
-    
         .results {
-          visibility: visible;
-          height: 100%;
-          opacity: 1;
-        }
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px; /* Space between cards */
+      justify-content: center; /* Centers cards horizontally */
+      width: 100%;
+      margin-top: 20px;
+    }
         
         input {
           font-size: 20px;
           line-height: 40px;
           width: 100%;
+        }
+
+        .project-card {
+          flex: 1 1 300px;
         }
       `];
     }
@@ -65,37 +80,32 @@ export class Project1 extends DDDSuper(I18NMixin(LitElement)) {
         <div class="search-container">
           <input id="input" 
           class="analyze-input" 
-          placeholder="Search HaxtheWeb">
+          placeholder="Search HaxtheWeb" />
           <div class="search-button"><button @click="${this.analyze}">Analyze</button></div>
         </div>
         <div class="results">
-          ${this.items.map((item) => {
-            const img = item.metadata && item.metadata.files && item.metadata.files[0] ? item.metadata.files[0] : '';
-            
-            return html`
+            ${this.items.map((item)=> {
+            const img = item.metadata && item.metadata.files && item.metadata.files[0] ? item.metadata.files[0].url : '';
+          
+              return html`
               <project-card
                 title="${item.title}"
-                description="${items.description}"
+                description="${item.description}"
                 logo="${img}"
                 slug="${item.slug}"
-                baseURL="${this.baseURL}"
+                baseURL="${this.baseUrl}"
               ></project-card>
-            `;
-          })}
+           `;
+            })}
         </div>
-      `;
-    }
-    
+    `;
+  }
 
-    analyze(e) {
-      const inputValue = this.shadowRoot.querySelector('#input').value;
-      if (inputValue) {
-        this.jsonURL = inputValue;
-        this.updateResults(inputValue);
-      } else {
-        console.warn('Input is empty; fetch not initiated.');
-      }
-    }
+  
+    
+  analyze(e) {
+    this.value = this.shadowRoot.querySelector('#input').value;
+  }
 
   updated(changedProperties) {
     if (changedProperties.has('value')) {
@@ -112,24 +122,22 @@ export class Project1 extends DDDSuper(I18NMixin(LitElement)) {
     return url.replace(/\/?[^\/]*\.json$/, '');
   }
 
-  updateResults(value) {
+  updateResults() {
     this.loading = true;
     this.baseURL = this.noJsonEnding(this.jsonURL);
-    fetch(this.jsonURL).then(d => d.ok ? d.json(): {}).then(data => {
-      if (data && Array.isArray(data.items)) {
-        this.items = data.items.filter(item =>
-          item.title.toLowerCase().includes(value.toLowerCase()) ||
-          item.description.toLowerCase().includes(value.toLowerCase())
-        );
-      }  
-      this.loading = false;
-    });
-  }
 
+    fetch(this.value)
+      .then((response) => response.ok ? response.json() : {})
+      .then((data) => {
+        // Check if data.items exists and contains at least one item with the required properties             
+          this.items = data.items;                         
+          this.loading = false;                
+      });
+    }
 
-  static get tag() {
-    return "project-1";
-  }
+    static get tag() {
+      return "project-1";
+    }
 
 }
 
