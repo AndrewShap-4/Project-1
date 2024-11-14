@@ -15,14 +15,6 @@ export class Project1 extends DDDSuper(I18NMixin(LitElement)) {
     this.baseUrl = '';
     this.isValid = false;
     this.lastUpdated = '';
-
-    this.registerLocalization({
-      context: this,
-      localesPath:
-        new URL("./locales/Project-1-search.ar.json", import.meta.url).href +
-        "/../",
-      locales: ["ar", "es", "hi", "zh"],
-    });
     }
 
     static get properties() {
