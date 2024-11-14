@@ -11,8 +11,8 @@ export class Project1 extends DDDSuper(I18NMixin(LitElement)) {
     this.value = '';
     this.items = [];
     this.loading = false;
-    this.jsonURL = 'https://haxtheweb.org/site.json';
-    this.baseUrl = this.noJsonEnding(this.jsonURL);
+    this.jsonURL = '';
+    this.baseUrl = '';
     this.isValid = false;
     this.lastUpdated = '';
 
@@ -54,17 +54,20 @@ export class Project1 extends DDDSuper(I18NMixin(LitElement)) {
           max-width: 600px;
           margin: 20px auto;
         }
+
         .results {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px; /* Space between cards */
-      justify-content: center; /* Centers cards horizontally */
-      width: 100%;
-      margin-top: 20px;
-    }
+          display: flex;
+          flex-wrap: wrap;
+          gap: 20px; /* Space between cards */
+          justify-content: center; /* Centers cards horizontally */
+          width: 100%;
+          margin-top: 20px;
+        }
         
         input {
-          font-size: 20px;
+          border-radius: var(--ddd-radius-rounded);
+          font-size: 1.5em;
+          text-align: center;
           line-height: 40px;
           width: 100%;
         }
@@ -72,6 +75,19 @@ export class Project1 extends DDDSuper(I18NMixin(LitElement)) {
         .project-card {
           flex: 1 1 300px;
         }
+
+        .search-button button {
+        background-color: red;
+        color: white;
+        padding: var(--ddd-spacing-2, 8px);
+        border-radius: var(--ddd-radius-sm);
+        border: var(--ddd-border-sm);
+        border-color: black;
+        cursor: pointer;
+        font-size: 1em;
+        margin: 8px;
+      }
+
       `];
     }
     
@@ -82,7 +98,8 @@ export class Project1 extends DDDSuper(I18NMixin(LitElement)) {
         <div class="search-container">
           <input id="input" 
           class="analyze-input" 
-          placeholder="Search HaxtheWeb" />
+          placeholder="Search HaxtheWeb" 
+          @input="${this.onInputChange}"/>
           <div class="search-button"><button @click="${this.analyze}">Analyze</button></div>
         </div>
         <div class="results">
@@ -98,6 +115,7 @@ export class Project1 extends DDDSuper(I18NMixin(LitElement)) {
                 slug="${item.slug}"
                 baseURL="${this.baseUrl}"
                 lastUpdated="${updated}"
+                location="${this.baseUrl}/${item.location}"
               ></project-card>
            `;
             })}
@@ -105,40 +123,52 @@ export class Project1 extends DDDSuper(I18NMixin(LitElement)) {
     `;
   }
 
-  
-    
-  analyze(e) {
-    this.value = this.shadowRoot.querySelector('#input').value;
+  onInputChange(e) {
+    this.jsonURL = e.target.value; // Update the jsonURL when the user types
   }
 
+  analyze() {
+    const inputUrl = this.shadowRoot.querySelector('#input').value;
+    this.value = this.noJsonEnding(inputUrl) + '/site.json'; 
+    this.updateResults(); 
+  }
 
   updated(changedProperties) {
-    if (changedProperties.has('value')) {
+    if (changedProperties.has('value') && this.value) {
       this.updateResults(this.value);
     } else if (changedProperties.has('value') && !this.value) {
       this.items = [];
     }
+
     if (changedProperties.has('items') && this.items.length > 0) {
       console.log(this.items);
     }
   }
 
   noJsonEnding(url) {
-    return url.replace(/\/?[^\/]*\.json$/, '');
+    return url.replace(/\/[^/]*\.json$/, ''); 
   }
 
   updateResults() {
     this.loading = true;
-    this.baseURL = this.noJsonEnding(this.jsonURL);
+    this.baseUrl = this.noJsonEnding(this.jsonURL); 
 
     fetch(this.value)
-      .then((response) => response.ok ? response.json() : {})
-      .then((data) => {
-        // Check if data.items exists and contains at least one item with the required properties             
-          this.items = data.items;                         
-          this.loading = false;                
-      });
-    }
+    .then((response) => response.ok ? response.json() : {})
+    .then((data) => {
+      // Check if data.items exists and contains at least one item with the required properties
+      if (data.items && Array.isArray(data.items)) {
+        this.items = data.items;
+      } else {
+        this.items = [];
+      }
+      this.loading = false;
+    })
+    .catch(() => {
+      this.items = [];
+      this.loading = false;
+    });
+}
 
     static get tag() {
       return "project-1";
