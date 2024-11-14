@@ -1,6 +1,7 @@
 import { LitElement, html, css } from "lit";
 import { DDDSuper } from "@haxtheweb/d-d-d/d-d-d.js";
 
+
 export class ProjectCard extends DDDSuper(LitElement) {
 
   constructor() {
@@ -12,6 +13,7 @@ export class ProjectCard extends DDDSuper(LitElement) {
     this.logo = '';
     this.slug = 'google.com';
     this.baseURL = 'google.com';
+    this.lastUpdated = '';
   }
 
   static get properties() {
@@ -23,7 +25,7 @@ export class ProjectCard extends DDDSuper(LitElement) {
         logo: { type: String },
         slug: { type: String },
         baseURL: { type: String },
-    };
+      };
   }
 
   static get styles() {
@@ -32,15 +34,18 @@ export class ProjectCard extends DDDSuper(LitElement) {
         display: inline-flex;
         flex-direction: column;
         border: var(--ddd-border-md);
+        border-color: black;
         align-items: center;
         background-color: #f9f9f9;
-        width: 200px;
+        width: 300px;
         margin: 10px;
         padding: 10px;
+        height: 500px;
       }
   
       .image-container {
-        border: var(--ddd-border-sm);
+        border: var(--ddd-border-xs);
+        border-color: black;
         width: 100%;
         display: flex;
         justify-content: center;
@@ -49,30 +54,20 @@ export class ProjectCard extends DDDSuper(LitElement) {
       }
   
       img {
-        max-width: 100%;
+        width: 200px;
         height: auto;
         object-fit: cover;
         border-radius: 8px;
+        height: 150px;
       }
   
-      .info {
-        font-size: 1.2em;
+      .title {
+        font-size: 1.3em;
         margin-bottom: 8px;
       }
   
-      .text {
-        font-size: 1em;
-        color: #333;
-      }
-
-      .last-updated {
-        font-size: 0.9em;
-        color: #888;
-        margin-top: 8px;
-      }
-  
       .visit-website button {
-        background-color: red;
+        background-color: blue;
         color: white;
         padding: 8px;
         border: none;
@@ -82,31 +77,43 @@ export class ProjectCard extends DDDSuper(LitElement) {
       }
   
       .visit-website button:hover {
-        background-color: darkred;
+        background-color: darkblue;
       }
+
+      .description {
+        font-size: 1em;
+        color: #333;
+        padding: var(--ddd-spacing-2, 8px);
+      }
+
+      .last-updated {
+        font-size: 1em;
+        color: #333;
+        padding: var(--ddd-spacing-2, 8px);
+      }
+
+
     `];
   }
-
+  
   render() {
     return html`
-      <div class="card" tabindex="0">
-        <div class="image-container">
-          <img src="${this.baseURL}/${this.logo}" alt="${this.title}" />
-        </div>
-        <div class="info">${this.title}</div>
-        <div class="text">${this.description}</div>
-        
-        <!-- Updated link to open index.html -->
-        <a href="${this.baseURL}/index.html" target="_blank">
-          <div class="visit-website">
-            <button>Visit Website</button>
-          </div>
-        </a>
-
-        <!-- Display last updated date -->
-        ${this.lastUpdated ? html`<div class="last-updated">Last updated: ${this.lastUpdated}</div>` : ''}
-      </div>
+    <div class="card"
+        tabindex="0">
+    <div class="image-container">
+        <img src="${this.baseURL}/${this.logo}" alt="${this.jsonURL}" />
+    </div>
+    <div class="title"><strong>${this.title}</strong></div>
+    <div class="description"><strong>Description:</strong> ${this.description}</div>
+    <div class="last-updated"><strong>Last Updated:</strong> ${this.lastUpdated}</div>
+    <a href="${this.baseURL+'/'+this.slug}"
+        target="_blank"><div class="visit-website"><button @click="${this.visitWebsite}">Visit Website</button></div></a>
+  </div>
     `;
+  }
+
+  visitWebsite(e) {
+    this.value = this.shadowRoot.querySelector('#input').value;
   }
 
   static get tag() {
@@ -115,4 +122,8 @@ export class ProjectCard extends DDDSuper(LitElement) {
 
 }
 
+
 customElements.define(ProjectCard.tag, ProjectCard);
+
+
+

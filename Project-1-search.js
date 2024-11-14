@@ -14,6 +14,7 @@ export class Project1 extends DDDSuper(I18NMixin(LitElement)) {
     this.jsonURL = 'https://haxtheweb.org/site.json';
     this.baseUrl = this.noJsonEnding(this.jsonURL);
     this.isValid = false;
+    this.lastUpdated = '';
 
     this.registerLocalization({
       context: this,
@@ -32,6 +33,7 @@ export class Project1 extends DDDSuper(I18NMixin(LitElement)) {
           loading: {type: Boolean, reflect: true },
           jsonURL: { type: String, attribute: 'json-url' },
           baseUrl: { type: String },
+          lastUpdated: { type: String },
       };
     }
 
@@ -85,7 +87,8 @@ export class Project1 extends DDDSuper(I18NMixin(LitElement)) {
         </div>
         <div class="results">
             ${this.items.map((item)=> {
-            const img = item.metadata && item.metadata.files && item.metadata.files[0] ? item.metadata.files[0].url : '';
+            const updated = item.metadata ? new Date(parseInt(item.metadata.updated) * 1000).toLocaleDateString() : '';
+            const img = (item.metadata && item.metadata.files && item.metadata.files[0]) ? item.metadata.files[0].url : ''; 
           
               return html`
               <project-card
@@ -94,6 +97,7 @@ export class Project1 extends DDDSuper(I18NMixin(LitElement)) {
                 logo="${img}"
                 slug="${item.slug}"
                 baseURL="${this.baseUrl}"
+                lastUpdated="${updated}"
               ></project-card>
            `;
             })}
@@ -106,6 +110,7 @@ export class Project1 extends DDDSuper(I18NMixin(LitElement)) {
   analyze(e) {
     this.value = this.shadowRoot.querySelector('#input').value;
   }
+
 
   updated(changedProperties) {
     if (changedProperties.has('value')) {
