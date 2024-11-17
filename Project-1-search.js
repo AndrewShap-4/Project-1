@@ -51,7 +51,7 @@ export class Project1 extends DDDSuper(I18NMixin(LitElement)) {
       }
 
       .results {
-        display: flex;
+        display: grid;
         flex-wrap: wrap;
         grid-template-columns: repeat(4, 1fr);
         gap: 20px;
