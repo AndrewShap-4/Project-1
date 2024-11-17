@@ -15,6 +15,9 @@ export class ProjectCard extends DDDSuper(LitElement) {
     this.baseURL = 'google.com';
     this.lastUpdated = '';
     this.location = '';
+    this.readTime = '';
+    this.topLevel = false;
+    this.theme = '';
   }
 
   static get properties() {
@@ -27,6 +30,9 @@ export class ProjectCard extends DDDSuper(LitElement) {
         slug: { type: String },
         baseURL: { type: String },
         location: { type: String },
+        readTime: { type: String },
+        topLevel: {type: Boolean, reflect: true, attribute: "top-level"},
+        theme: {type: String},
       };
   }
 
@@ -36,18 +42,19 @@ export class ProjectCard extends DDDSuper(LitElement) {
         display: inline-flex;
         flex-direction: column;
         border: var(--ddd-border-md);
-        border-color: black;
+        border-color: var(--ddd-theme-default-coalyGray);
         align-items: center;
-        background-color: #f9f9f9;
+        background-color: var(--ddd-theme-default-white);
         width: 300px;
         margin: 10px;
         padding: 10px;
-        height: 500px;
+        height: 550px;
       }
+      
   
       .image-container {
         border: var(--ddd-border-xs);
-        border-color: black;
+        border-color: var(--ddd-theme-default-coalyGray);
         width: 100%;
         display: flex;
         justify-content: center;
@@ -69,8 +76,8 @@ export class ProjectCard extends DDDSuper(LitElement) {
       }
   
       .visit-website button {
-        background-color: blue;
-        color: white;
+        background-color: var(--ddd-theme-default-beaver70);
+        color: var(--ddd-theme-default-white);
         padding: var(--ddd-spacing-1, 4px);
         margin: var(--ddd-spacing-1);
         border: none;
@@ -80,24 +87,25 @@ export class ProjectCard extends DDDSuper(LitElement) {
       }
   
       .visit-website button:hover {
-        background-color: darkblue;
+        background-color: var(--ddd-theme-default-nittanyNavy);
       }
 
       .description {
         font-size: 1em;
-        color: #333;
+        color: var(--ddd-theme-default-coalyGray);
         padding: var(--ddd-spacing-2, 8px);
       }
 
-      .last-updated {
+      .read-time {
         font-size: 1em;
-        color: #333;
-        padding: var(--ddd-spacing-2, 8px);
+        color: var(--ddd-theme-default-coalyGray);
+        padding: var(--ddd-spacing-1, 4px);
       }
+
 
       .visit-source button {
-        background-color: blue;
-        color: white;
+        background-color: var(--ddd-theme-default-beaver70);
+        color: var(--ddd-theme-default-white);
         padding: var(--ddd-spacing-1, 4px);
         margin: var(--ddd-spacing-1);
         border: none;
@@ -107,15 +115,20 @@ export class ProjectCard extends DDDSuper(LitElement) {
       }
   
       .visit-source button:hover {
-        background-color: darkblue;
+        background-color: var(--ddd-theme-default-nittanyNavy);
       }
 
       .button-container {
       display: flex;
       gap: 10px; 
-      margin-top: 10px;
+      margin-top: 6px;
     }
 
+      .last-updated {
+        font-size: 1em;
+        color: var(--ddd-theme-default-coalyGray);
+        padding: var(--ddd-spacing-1);
+      }
 
     `];
   }
@@ -126,15 +139,20 @@ export class ProjectCard extends DDDSuper(LitElement) {
       this.logo = "/files/HAX.psu%20World%20changer-circle1.png";
     }
     
+    const logoURL = this.logo ? `${this.baseURL}/${this.logo}` : "/files/HAX.psu%20World%20changer-circle1.png";
+
     return html`
+    
     <div class="card"
         tabindex="0">
     <div class="image-container">
-        <img src="${this.baseURL}/${this.logo}" alt="${this.title}" />
+        <a href="${logoURL}" target="_blank">
+        <img src="${this.baseURL}/${this.logo}" alt="${this.title}" /></a>
     </div>
     <div class="title"><strong>${this.title}</strong></div>
     <div class="description"><strong>Description:</strong> ${this.description}</div>
     <div class="last-updated"><strong>Last Updated:</strong> ${this.lastUpdated}</div>
+    <div class="read-time"><strong>Read Time(Minutes):</strong> ${this.readTime}</div>
     <div class="button-container">
     <a href="${this.baseURL+'/'+this.slug}"
         target="_blank"><div class="visit-website"><button @click="${this.visitWebsite}">Visit Website</button></div></a>
